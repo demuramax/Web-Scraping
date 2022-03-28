@@ -1,21 +1,19 @@
 import pandas as pd
+from bs4 import BeautifulSoup
+import requests
 
-# states = ['California', 'Texax', 'Florida', 'New York']
-# population = [39464643, 45939244, 13446983, 23084895]
+website = 'https://subslikescript.com/movie/Titanic-120338'
+result = requests.get(website)
+content = result.text
 
-# dict_states = {'States': states, 'Population': population}
-# df_states = pd.DataFrame.from_dict(dict_states)
-# # print(df_states)
-# df_states.to_csv('states.csv', index=False)
+soup = BeautifulSoup(content, 'lxml')
+# print(soup.prettify())
 
-# with open('test.txt', 'w') as file:
-#     file.write('Data successfuly scraped')
+box = soup.find('article', class_='main-article')
 
-# Handlin Exception Errors
-new_list = [2, 4, 6, 'California']
+title = box.find('h1').get_text()
+transcript = box.find('div', class_='full-script').get_text(strip=True, separator=' ')
 
-for element in new_list: 
-    try: 
-        print(element/2)
-    except: 
-        print(f'The element {element} is not a number')
+
+with open(f'{title}.txt', 'w') as file:
+    file.write(transcript)
