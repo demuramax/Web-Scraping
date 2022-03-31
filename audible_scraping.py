@@ -1,11 +1,16 @@
 from matplotlib import container
 import pandas
 from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
 import pandas as pd
+
+options = Options()
+options.headless = True
+options.add_argument('window-size=1920x1080')
 
 web = 'https://www.audible.com/search'
 path = '/Users/maxmercury/Downloads/Web Scraping course/chromedriver'
-driver = webdriver.Chrome(path)
+driver = webdriver.Chrome(path, options=options)
 driver.get(web)
 driver.maximize_window()
 
