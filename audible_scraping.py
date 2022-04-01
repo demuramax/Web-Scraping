@@ -11,7 +11,7 @@ import time
 
 web = 'https://www.audible.com/adblbestsellers?ref=a_search_t1_navTop_pl0cg1c0r0&pf_rd_p=adc4b13b-d074-4e1c-ac46-9f54aa53072b&pf_rd_r=SD8KB6YRST0H8RWQPQ77'
 path = '/Users/maxmercury/Downloads/Web Scraping course/chromedriver'
-driver = webdriver.Chrome(path, options=options)
+driver = webdriver.Chrome(path)
 driver.get(web)
 driver.maximize_window()
 
