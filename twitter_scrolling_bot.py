@@ -5,11 +5,11 @@ from selenium.webdriver.support import expected_conditions as EC
 import pandas as pd
 import time
 
-web = 'https://twitter.com/search?q=python&src=typed_query'
+web = 'https://twitter.com/DataScienceDojo/status/1508264612902359045'
 path = '/Users/maxmercury/Downloads/Web Scraping course/chromedriver'
 driver = webdriver.Chrome(path)
 driver.get(web)
-driver.maximize_window()
+driver.maximize_window()    
 
 def get_tweet(element):
     try:
@@ -22,13 +22,29 @@ def get_tweet(element):
 
 user_data = []
 text_data = []
-tweets = WebDriverWait(driver, 5).until(EC.presence_of_all_elements_located((By.XPATH, '//article[@role="article"]')))
-
-for tweet in tweets:
-    tweet_list = get_tweet(tweet)
-    user_data.append(tweet_list[0])
-    text_data.append(" ".join(tweet_list[1].split()))
+tweet_ids = set()
+scrolling = True
+while scrolling:
+    tweets = WebDriverWait(driver, 5).until(EC.presence_of_all_elements_located((By.XPATH, '//article[@role="article"]')))
+    for tweet in tweets[-15:]:
+        tweet_list = get_tweet(tweet)
+        tweet_id = ''.join(tweet_list)
+        if tweet_id not in tweet_ids:
+            tweet_ids.add(tweet_id)
+            user_data.append(tweet_list[0])
+            text_data.append(" ".join(tweet_list[1].split()))
+    last_height = driver.execute_script("return document.body.scrollHeight")
+    while True:
+        driver.execute_script('window.scrollTo(0, document.body.scrollHeight);')
+        time.spleep(5)
+        new_height = driver.execute_script("return document.body.scrollHeight")
+        if new_height == last_height:
+            scrolling = False
+            break
+        else:
+            last_height = new_height
+            
     
 driver.quit()
 df_tweets = pd.DataFrame({'user': user_data, 'text': text_data})
-df_tweets.to_csv('tweets.csv', index=False)
+df_tweets.to_csv('tweets_infinite_scrolling.csv', index=False)
