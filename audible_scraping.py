@@ -1,5 +1,8 @@
 from matplotlib import container
 import pandas
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 import pandas as pd
@@ -26,9 +29,11 @@ book_author = []
 book_length = []
     
 while current_page <= last_page:
-    time.sleep(2)
-    container = driver.find_element_by_class_name('adbl-impression-container ')
-    products = container.find_elements_by_xpath('./li')
+    # time.sleep(2)
+    container = WebDriverWait(driver, 5).until(EC.presence_of_element_located(By.CLASS_NAME, 'adbl-impression-container '))
+    #container = driver.find_element_by_class_name('adbl-impression-container ')
+    products = WebDriverWait(container, 5).until(EC.presence_of_all_elements_located(By.XPATH('./li')))
+    #products = container.find_elements_by_xpath('./li')
 
     for product in products: 
         book_title.append(product.find_element_by_xpath('.//h3[contains(@class, "bc-heading")]').text)
