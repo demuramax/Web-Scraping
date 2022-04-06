@@ -19,11 +19,13 @@ class AudibleSpider(scrapy.Spider):
             book_title = product.xpath('.//h3[contains(@class , "bc-heading")]/a/text()').get()
             book_author = product.xpath('.//li[contains(@class , "authorLabel")]/span/a/text()').getall()
             book_length = product.xpath('.//li[contains(@class , "runtimeLabel")]/span/text()').get()
+            
+            book_author_string = ' '.join(book_author)
 
             # Return data extracted
             yield {
                 'title':book_title,
-                'author':book_author,
+                'author':book_author_string,
                 'length':book_length,
             }
 
@@ -34,4 +36,4 @@ class AudibleSpider(scrapy.Spider):
         # Going to the "next_page_url" link
         if next_page_url:
             yield response.follow(url=next_page_url, callback=self.parse, 
-                                  headers={'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.60 Safari/537.36'})
+                    headers={'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.60 Safari/537.36'})
