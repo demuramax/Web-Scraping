@@ -33,20 +33,17 @@ class SQLitePipeline:
         # we need a cursor object to execute SQL queries
         self.c = self.connection.cursor()
         #  try/except will help when running this for the +2nd time (we can't create the same table twice)
-        try:
-            # query: create table with columns
-            self.c.execute('''
-                CREATE TABLE audible(
-                    title TEXT,
-                    author TEXT,
-                    length TEXT,
-                    url TEXT,
-                )
-            ''')
-            # save changes
-            self.connection.commit()
-        except sqlite3.OperationalError:
-            pass
+        
+        # query: create table with columns
+        self.c.execute('''
+            CREATE TABLE audible (
+                title TEXT,
+                author TEXT,
+                length TEXT,
+                url TEXT,
+            ) m''')
+    # save changes
+        self.connection.commit()
 
 
     def close_spider(self, spider):
