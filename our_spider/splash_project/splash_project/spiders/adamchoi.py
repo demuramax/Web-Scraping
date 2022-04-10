@@ -18,7 +18,7 @@ class AdamchoiSpider(scrapy.Spider):
           splash:set_viewport_full()
           return {splash:png(), splash:html()}
         end
-    '''
+    ''' 
 
     # Define a start_requests function to connect scrapy and splash
     def start_requests(self):
